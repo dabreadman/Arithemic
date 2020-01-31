@@ -257,7 +257,51 @@ public class Arith
 	 **/
 	public static String[] convertPrefixToPostfix(String prefixLiterals[])
 	{
-		//TODO
+		Stack<Character> operators = new Stack();
+		Stack<String> operands = new Stack();
+
+		for(int i = 0 ; i < prefixLiterals.length ; i++) {
+			String literal = prefixLiterals[i];
+
+			//test if it is operator
+			if(literal.matches("[*+-/]")) {
+				operators.push(literal.charAt(0));
+				operands.push("(");
+			}
+
+			//check if only matches digit
+			else if(literal.matches("[0-9]+")) {
+				operands.push(literal);
+			}
+		}
+
+		Stack<String> temp = new Stack();
+		String n1,n2,result;
+
+		while(operators.size()>0) {
+			char operator = operators.pop();
+			String operand = operands.pop();
+
+			//find the correct pair
+			while(!operand.equals("(")) {
+				temp.push(operand);
+				operand = operands.pop();
+			}
+
+			n1 = temp.pop();
+			n2 = temp.pop();
+
+			//calculation
+			result = operator+n1+n2;
+
+			// push result back into the stack
+			operands.push(result+"");
+			// empty the temp
+			while(temp.size()!=0) operands.push(temp.pop());
+		}
+
+		return operands.pop().split("");
+
 	}
 
 
@@ -273,7 +317,28 @@ public class Arith
 	 **/
 	public static String[] convertPostfixToPrefix(String postfixLiterals[])
 	{
-		//TODO
+		Stack<String> operands = new Stack();
+		String result="";
+		
+		String n1,n2;
+		for(int i = 0 ; i < postfixLiterals.length ; i++) {
+			
+			String literal = postfixLiterals[i];
+			//if operand
+			if(literal.matches("[0-9]+")) {
+				operands.push(literal);
+			}
+
+			//operators
+			else{
+				n2 = operands.pop();
+				n1 = operands.pop();
+				result = literal+n1+n2;
+				operands.push(result);
+			}
+		}
+		return operands.pop().split("");
+				
 	}
 
 	/**
@@ -288,7 +353,43 @@ public class Arith
 	 **/
 	public static String[] convertPrefixToInfix(String prefixLiterals[])
 	{
-		//TODO
+		Stack<Character> operators = new Stack();
+		Stack<String> operands = new Stack();
+
+		for(int i = 0 ; i < prefixLiterals.length ; i++) {
+			String literal = prefixLiterals[i];
+
+			//test if it is operator
+			if(literal.matches("[*+-/]")) {
+				operators.push(literal.charAt(0));
+				operands.push("(");
+			}
+
+			//check if only matches digit
+			else if(literal.matches("[0-9]+")) {
+				operands.push(literal);
+			}
+		}
+
+		Stack<String> temp = new Stack();
+		String n1,n2,result = "";
+
+		while(operators.size()>0) {
+			char operator = operators.pop();
+			String operand = operands.pop();
+
+			//find the correct pair
+			while(!operand.equals("(")) {
+				temp.push(operand);
+				operand = operands.pop();
+			}
+			
+			n1 = temp.pop();
+			n2 = temp.pop();
+			result = "("+n1+operator+n2+")";
+			operands.push(result);
+		}
+		return operands.pop().split("");
 	}
 
 	/**
@@ -303,13 +404,38 @@ public class Arith
 	 **/
 	public static String[] convertPostfixToInfix(String postfixLiterals[])
 	{
-		//TODO
+		Stack<Character> operators = new Stack();
+		Stack<String> operands = new Stack();
+
+		for(int i = 0 ; i < postfixLiterals.length ; i++) {
+			String literal = postfixLiterals[i];
+			//operands
+			if(literal.matches("[0-9]+")) {
+				operands.push(literal);
+			}
+
+			//operators
+			else{
+				//extract the operator
+				char operator = postfixLiterals[i].charAt(0);
+				
+				String n1,n2;
+				//extract two operands
+				 n2 = operands.pop();
+				 n1 = operands.pop();
+		
+				//push result back into the stack
+				operands.push("("+n1+operator+n2+")");
+			}
+		}
+		return operands.pop().split("");
 	}
 
 	public static void main(String[]args) {
 		int [] test = new int[] {1,2,3};
-		String[] str = new String[]{ "3","5","3","+","+","4","-"};
-		System.out.println(evaluatePostfixOrder(str));
+		String[] str = new String[]{ "-","8","+","-","3","4","7"};
+		for(String str2:convertPrefixToPostfix(str))
+		System.out.print(str2);
 	}
 
 }
