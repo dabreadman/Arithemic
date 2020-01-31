@@ -12,7 +12,7 @@ import java.util.Stack;
 public class Arith 
 {
 
-
+	public static String MARKER = "£";
 	//~ Validation methods ..........................................................
 
 
@@ -25,6 +25,10 @@ public class Arith
 	 * - or a valid string representation of an integer.
 	 *
 	 * @return true if the parameter is indeed in prefix notation, and false otherwise.
+	 * 
+	 * Argument: 
+	 * 	Runtime: 0(n) worst-case: To validate the expression, we have to go through all elements.
+	 * 	Space Complexity: 0(n) worst-case: Seems possible to reduce the memory used using stack of references, but it is still O(n).
 	 **/
 	public static boolean validatePrefixOrder(String prefixLiterals[])
 	{
@@ -32,7 +36,11 @@ public class Arith
 		int operands = 0;
 		int divide = 0;
 
+		if(prefixLiterals.length==0) return true;
+		if(prefixLiterals.length==1 && prefixLiterals[0].matches("[0-9]+")) return true;
+		
 		for(int i = 0 ; i < prefixLiterals.length ; i++) {
+			String str = prefixLiterals[i];
 			//check if only matches digit
 			if(prefixLiterals[i].matches("[0-9]+")) {
 				if(operators<1) return false;
@@ -51,6 +59,8 @@ public class Arith
 
 			//test if it is operator
 			else if(prefixLiterals[i].matches("[*+-/]")) {
+				//operators can never be the last two elements
+				if(i == prefixLiterals.length-2) return false;
 				operators++;
 
 				//set flag for division
@@ -58,6 +68,8 @@ public class Arith
 
 				//add one step for each other operators
 				else if(divide != 0) divide ++;
+				
+				
 			}
 			//invalid input
 			else return false;
@@ -76,6 +88,10 @@ public class Arith
 	 * - or a valid string representation of an integer.
 	 *
 	 * @return true if the parameter is indeed in postfix notation, and false otherwise.
+	 * 
+	 * Argument: 
+	 * 	Runtime: 0(n) worst-case: To validate the expression, we have to go through all elements.
+	 * 	Space Complexity: 0(n) worst-case: Seems possible to reduce the memory used using stack of references, but it is still O(n).
 	 **/
 	public static boolean validatePostfixOrder(String postfixLiterals[])
 	{
@@ -83,6 +99,9 @@ public class Arith
 		int operands = 0;
 		int zero = 0;
 
+		if(postfixLiterals.length==0) return true;
+		if(postfixLiterals.length==1 && postfixLiterals[0].matches("[0-9]+")) return true;
+		
 		for(int i = 0 ; i < postfixLiterals.length ; i++) {
 			//test if it is operator
 			if(postfixLiterals[i].matches("[*+-/]")) {
@@ -128,6 +147,10 @@ public class Arith
 	 * - or a valid string representation of an integer.
 	 *
 	 * @return the integer result of evaluating the expression
+	 * 
+	 * Argument: 
+	 * 	Runtime: 0(n) worst-case: To evaluate the expression, we have to go through all elements.
+	 * 	Space Complexity: 0(n) worst-case: Seems possible to reduce the memory used using stack of references, but it is still O(n).
 	 **/
 	public static int evaluatePrefixOrder(String prefixLiterals[])
 	{
@@ -200,6 +223,10 @@ public class Arith
 	 * - or a valid string representation of an integer.
 	 *
 	 * @return the integer result of evaluating the expression
+	 * 
+	 * Argument: 
+	 * 	Runtime: 0(n) worst-case: To evaluate the expression, we have to go through all elements.
+	 * 	Space Complexity: 0(n) worst-case: Seems possible to reduce the memory used using stack of references, but it is still O(n).
 	 **/
 	public static int evaluatePostfixOrder(String postfixLiterals[])
 	{
@@ -254,6 +281,10 @@ public class Arith
 	 * - or a valid string representation of an integer.
 	 *
 	 * @return the expression in postfix order.
+	 * 
+	 * Argument: 
+	 * 	Runtime: 0(n) worst-case: To evaluate the expression, we have to go through all elements.
+	 * 	Space Complexity: 0(n) worst-case: Seems possible to reduce the memory used using stack of references, but it is still O(n).
 	 **/
 	public static String[] convertPrefixToPostfix(String prefixLiterals[])
 	{
@@ -292,7 +323,7 @@ public class Arith
 			n2 = temp.pop();
 
 			//calculation
-			result = operator+n1+n2;
+			result = n1 + MARKER + n2 + MARKER +operator ;
 
 			// push result back into the stack
 			operands.push(result+"");
@@ -300,8 +331,7 @@ public class Arith
 			while(temp.size()!=0) operands.push(temp.pop());
 		}
 
-		return operands.pop().split("");
-
+		return operands.pop().split(MARKER);
 	}
 
 
@@ -314,6 +344,10 @@ public class Arith
 	 * - or a valid string representation of an integer.
 	 *
 	 * @return the expression in prefix order.
+	 * 
+	 * Argument: 
+	 * 	Runtime: 0(n) worst-case: To evaluate the expression, we have to go through all elements.
+	 * 	Space Complexity: 0(n) worst-case: Seems possible to reduce the memory used using stack of references, but it is still O(n).
 	 **/
 	public static String[] convertPostfixToPrefix(String postfixLiterals[])
 	{
@@ -333,11 +367,11 @@ public class Arith
 			else{
 				n2 = operands.pop();
 				n1 = operands.pop();
-				result = literal+n1+n2;
+				result = literal + MARKER + n1 + MARKER + n2;
 				operands.push(result);
 			}
 		}
-		return operands.pop().split("");
+		return operands.pop().split(MARKER);
 				
 	}
 
@@ -350,6 +384,10 @@ public class Arith
 	 * - or a valid string representation of an integer.
 	 *
 	 * @return the expression in infix order.
+	 * 
+	 * Argument: 
+	 * 	Runtime: 0(n) worst-case: To evaluate the expression, we have to go through all elements.
+	 * 	Space Complexity: 0(n) worst-case: Seems possible to reduce the memory used using stack of references, but it is still O(n).
 	 **/
 	public static String[] convertPrefixToInfix(String prefixLiterals[])
 	{
@@ -386,10 +424,10 @@ public class Arith
 			
 			n1 = temp.pop();
 			n2 = temp.pop();
-			result = "("+n1+operator+n2+")";
+			result = "(" + MARKER + n1 + MARKER + operator + MARKER + n2  + MARKER + ")";
 			operands.push(result);
 		}
-		return operands.pop().split("");
+		return operands.pop().split(MARKER);
 	}
 
 	/**
@@ -401,6 +439,10 @@ public class Arith
 	 * - or a valid string representation of an integer.
 	 *
 	 * @return the expression in infix order.
+	 * 
+	 * Argument: 
+	 * 	Runtime: 0(n) worst-case: To evaluate the expression, we have to go through all elements.
+	 * 	Space Complexity: 0(n) worst-case: Seems possible to reduce the memory used using stack of references, but it is still O(n).
 	 **/
 	public static String[] convertPostfixToInfix(String postfixLiterals[])
 	{
@@ -425,17 +467,44 @@ public class Arith
 				 n1 = operands.pop();
 		
 				//push result back into the stack
-				operands.push("("+n1+operator+n2+")");
+				operands.push("(" + MARKER + n1 + MARKER + operator + MARKER + n2 + MARKER + ")");
 			}
 		}
-		return operands.pop().split("");
+		return operands.pop().split(MARKER);
 	}
 
-	public static void main(String[]args) {
-		int [] test = new int[] {1,2,3};
-		String[] str = new String[]{ "-","8","+","-","3","4","7"};
-		for(String str2:convertPrefixToPostfix(str))
-		System.out.print(str2);
-	}
+/**
+ *  Research
+	Data Structure Used: Primitive Types, Strings and Stack.
+
+
+Estimate the running time of the above methods:
+
+Worst-case Asymptotic Runtime:
+
+validatePrefixOrder(String prefixLiterals[]): O(n)
+	Goes through all elements twice.
+	
+validatePostfixOrder(String prefixLiterals[]): O(n)
+	Goes through all elements twice.
+	
+evaluatePrefixOrder(String prefixLiterals[]): O(n)
+	Goes through all elements twice.
+	
+evaluatePostfixOrder(String postfixLiterals[]): O(n)
+	Goes through all elements twice.
+	
+convertPrefixToPostfix(String prefixLiterals[]): O(n)
+	Goes through all elements twice.
+	
+convertPostfixToPrefix(String postfixLiterals[]): O(n)
+	Goes through all elements twice.
+	
+convertPrefixToInfix(String prefixLiterals[]): O(n)
+	Goes through all elements twice.
+	
+convertPostfixToInfix(String postfixLiterals[]): O(n)
+	Goes through all elements twice.
+ */
 
 }
