@@ -28,7 +28,7 @@ public class Arith
 	 * 
 	 * Argument: 
 	 * 	Runtime: 0(n) worst-case: To validate the expression, we have to go through all elements.
-	 * 	Space Complexity: 0(n) worst-case: Seems possible to reduce the memory used using stack of references, but it is still O(n).
+	 * 	Space Complexity: 0(1) worst-case: Only uses constants.
 	 **/
 	public static boolean validatePrefixOrder(String prefixLiterals[])
 	{
@@ -91,14 +91,13 @@ public class Arith
 	 * 
 	 * Argument: 
 	 * 	Runtime: 0(n) worst-case: To validate the expression, we have to go through all elements.
-	 * 	Space Complexity: 0(n) worst-case: Seems possible to reduce the memory used using stack of references, but it is still O(n).
+	 * 	Space Complexity: 0(1) worst-case: Only uses constants. 
 	 **/
 	public static boolean validatePostfixOrder(String postfixLiterals[])
 	{
 		int operators = 0;
 		int operands = 0;
 		int zero = 0;
-
 		if(postfixLiterals.length==0) return true;
 		if(postfixLiterals.length==1 && postfixLiterals[0].matches("[0-9]+")) return true;
 		
